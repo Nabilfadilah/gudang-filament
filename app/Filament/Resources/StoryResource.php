@@ -12,6 +12,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\Components\Tab;
+
 
 class StoryResource extends Resource
 {
@@ -111,6 +113,9 @@ class StoryResource extends Resource
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
-            ]);
+            ])
+            // filter story berdasarkan writer yang sedang login
+            ->where('author_id', auth()->user()->id)
+        ;
     }
 }
