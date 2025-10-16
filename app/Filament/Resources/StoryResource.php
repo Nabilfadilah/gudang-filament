@@ -115,7 +115,10 @@ class StoryResource extends Resource
                 SoftDeletingScope::class,
             ])
             // filter story berdasarkan writer yang sedang login
-            ->where('author_id', auth()->user()->id)
+            // ->where('author_id', auth()->user()->id)
+            ->when(auth()->user()->hasRole('Writer'), function ($query) {
+                $query->where('author_id', auth()->user()->id);
+            })
         ;
     }
 }
