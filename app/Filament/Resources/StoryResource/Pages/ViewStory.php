@@ -37,7 +37,7 @@ class ViewStory extends ViewRecord
 
 
             // cancel
-            Actions\Action::make('cancel')
+            Actions\Action::make('canceled')
                 ->label('Cancel')
                 ->color('danger')
                 ->form([
@@ -48,7 +48,7 @@ class ViewStory extends ViewRecord
                         ->columnSpanFull()
                 ])
                 ->action(function (array $data) {
-                    $this->record->update(['status' => 'cancel', 'feedback' => $data['feedback']]);
+                    $this->record->update(['status' => 'canceled', 'feedback' => $data['feedback']]);
                 })
                 ->visible(fn() => auth()->user()->hasRole('Reviewer')
                     && $this->record->status === 'in review'

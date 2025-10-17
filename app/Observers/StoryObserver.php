@@ -14,7 +14,8 @@ class StoryObserver
     // update
     public function updating(Story $story): void
     {
-        $story->reviewer_id = auth()->id();
+        // $story->reviewer_id = auth()->id();
+        // $story->status = 'waiting for review';
     }
 
     /**

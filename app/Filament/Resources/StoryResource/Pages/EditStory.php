@@ -19,4 +19,16 @@ class EditStory extends EditRecord
             Actions\RestoreAction::make(),
         ];
     }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $data['status'] = 'waiting for review';
+
+        // ketika story di edit, set reviewer_id dan status
+        // if (auth()->user()->hasRole('Reviewer')) {
+        //     $data['reviewer_id'] = auth()->id();
+        //     $data['status'] = 'in review';
+        // }
+        return $data;
+    }
 }

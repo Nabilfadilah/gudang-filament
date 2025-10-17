@@ -55,6 +55,7 @@ class StoryResource extends Resource
                 Tables\Columns\TextColumn::make('title')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('status')
+                    ->badge()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('author.name')
                     ->searchable()
@@ -92,9 +93,8 @@ class StoryResource extends Resource
                     ->visible(fn(Story $record) => auth()->user()->hasRole('Reviewer') && $record->status === 'waiting for review')
                     ->requiresConfirmation()
                     ->action(function (Story $record) {
-                        $record->update(['status' => 'in review']);
+                        $record->update(['status' => 'in review', 'reviewer_id' => auth()->id()]);
                         return redirect(static::getUrl('view', ['record' => $record]));
-                        // return redirect()->route('filament.resources.stories.view', ['record' => $record->id]);
                     })
             ])
             ->bulkActions([
