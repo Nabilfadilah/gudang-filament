@@ -11,6 +11,12 @@ class StoryObserver
         $story->author_id = auth()->id();
     }
 
+    // update
+    public function updating(Story $story): void
+    {
+        $story->reviewer_id = auth()->id();
+    }
+
     /**
      * Handle the Story "created" event.
      */

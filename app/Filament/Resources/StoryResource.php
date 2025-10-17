@@ -59,7 +59,7 @@ class StoryResource extends Resource
                 Tables\Columns\TextColumn::make('author.name')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('reviewer_id')
+                Tables\Columns\TextColumn::make('reviewer.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -86,6 +86,16 @@ class StoryResource extends Resource
                     ->requiresConfirmation()
                     ->successNotificationTitle('Story deleted successfully.')
                     ->failureNotificationTitle('Failed to delete story.'),
+                Tables\Actions\Action::make('review')
+                    ->label('Review')
+                    ->icon('heroicon-o-check-circle')
+                    ->visible(fn(Story $record) => auth()->user()->hasRole('Reviewer') && $record->status === 'waiting for review')
+                    ->requiresConfirmation()
+                    ->action(function (Story $record) {
+                        $record->update(['status' => 'in review']);
+                        return redirect(static::getUrl('view', ['record' => $record]));
+                        // return redirect()->route('filament.resources.stories.view', ['record' => $record->id]);
+                    })
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
