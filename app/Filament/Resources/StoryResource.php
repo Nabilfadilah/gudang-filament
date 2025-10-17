@@ -90,7 +90,9 @@ class StoryResource extends Resource
                 Tables\Actions\Action::make('review')
                     ->label('Review')
                     ->icon('heroicon-o-check-circle')
-                    ->visible(fn(Story $record) => auth()->user()->hasRole('Reviewer') && $record->status === 'waiting for review')
+                    ->visible(fn(Story $record) => auth()->user()->hasRole('Reviewer')
+                        && $record->status === 'waiting for review'
+                        && ($record->reviewer_id === auth()->user()->id || is_null($record->reviewer_id)))
                     ->requiresConfirmation()
                     ->action(function (Story $record) {
                         $record->update(['status' => 'in review', 'reviewer_id' => auth()->id()]);
